@@ -1,78 +1,266 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HTS Location - Location de voitures</title>
+  <meta name="description" content="HTS Location – Louez facilement une voiture à Genève : citadine, SUV et modèles premium. Tarifs transparents, réservation rapide.">
+
+  <!-- Google Fonts: DM Sans (texte) + Space Grotesk (titres) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    header { background: #111; color: white; padding: 20px; text-align: center; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-    section { padding: 40px; }
-    .catalogue { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .car { border: 1px solid #ddd; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .car img { width: 100%; height: 180px; object-fit: cover; }
-    .car-info { padding: 15px; }
-    footer { background: #111; color: white; text-align: center; padding: 20px; }
-    form input, form textarea { width: 100%; padding: 10px; margin: 5px 0; }
-    form button { background: #111; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-    form button:hover { background: #444; }
+    :root{
+      --bg:#0f1115;           /* fond principal */
+      --card:#171a21;         /* fond des cartes */
+      --text:#e8ecf1;         /* texte principal */
+      --muted:#9aa3b2;        /* texte secondaire */
+      --border:rgba(255,255,255,.08);
+      --brand1:#4f8cff;       /* accent 1 */
+      --brand2:#74ffa7;       /* accent 2 */
+      --radius:16px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text)}
+    body{font-family:"DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height:1.55}
+    h1,h2,h3{font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0 0 .5rem}
+    a{text-decoration:none;color:inherit}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      background:rgba(15,17,21,.85);
+      backdrop-filter:saturate(180%) blur(8px);
+      border-bottom:1px solid var(--border);
+    }
+    .container{max-width:1100px; margin:0 auto; padding:0 20px;}
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0;}
+    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.2px;}
+    .logo{
+      width:38px; height:38px; border-radius:10px;
+      background:linear-gradient(135deg, var(--brand1), var(--brand2));
+      display:grid; place-items:center; color:#0a0c10; font-weight:900;
+    }
+    nav a{opacity:.9; font-weight:700}
+    nav a + a{margin-left:18px}
+    .cta{
+      padding:10px 14px; border-radius:12px; font-weight:800; color:#0a0c10;
+      background:linear-gradient(135deg, var(--brand1), var(--brand2));
+    }
+
+    /* Hero */
+    .hero{border-bottom:1px solid var(--border)}
+    .hero-wrap{
+      display:grid; grid-template-columns:1.05fr .95fr; gap:26px; align-items:center;
+      padding:40px 0 28px;
+    }
+    .hero h1{font-size:clamp(28px,5vw,44px); line-height:1.1}
+    .hero p{color:var(--muted); font-size:clamp(14px,2.2vw,18px); margin:12px 0 18px}
+    .actions{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{
+      padding:12px 16px; border-radius:14px; border:1px solid var(--border); background:#141821; color:var(--text); font-weight:700;
+    }
+    .btn-primary{background:linear-gradient(135deg, var(--brand1), var(--brand2)); color:#0a0c10; border:none}
+    .art{
+      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border);
+      aspect-ratio: 16/10; background:#0e1218;
+    }
+    .art img{width:100%; height:100%; object-fit:cover}
+
+    /* Sections communes */
+    section{padding:36px 0}
+    .section-title{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:16px}
+    .section-title h2{font-size:24px}
+    .section-title p{color:var(--muted); margin:0}
+
+    /* Filtres (placeholder décoratif) */
+    .filters{
+      position:sticky; top:64px; z-index:40; background:rgba(17,20,26,.85);
+      backdrop-filter:saturate(180%) blur(8px); padding:12px; border-bottom:1px solid var(--border);
+    }
+    .bar{display:grid; grid-template-columns:repeat(6,1fr); gap:10px}
+    .bar input,.bar select{
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border);
+      background:#12161f; color:var(--text)
+    }
+
+    /* Catalogue */
+    .catalogue{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px}
+    .car{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column;
+    }
+    .car .thumb{height:180px; overflow:hidden}
+    .car .thumb img{width:100%; height:100%; object-fit:cover}
+    .car-info{padding:14px}
+    .muted{color:var(--muted)}
+    .price{display:flex; align-items:baseline; gap:8px; margin:8px 0 12px}
+    .price strong{font-size:20px}
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted);
+      background:#0f141d; border:1px solid var(--border);
+    }
+    .card-actions{display:flex; gap:10px; margin-top:auto; padding:0 14px 14px}
+
+    /* À propos & Contact */
+    .about{display:grid; grid-template-columns:1.1fr .9fr; gap:22px}
+    .panel{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:16px; box-shadow:var(--shadow);
+    }
+    form input, form textarea{
+      width:100%; padding:12px 14px; margin:6px 0 10px; border-radius:12px; background:#12161f; color:var(--text);
+      border:1px solid var(--border)
+    }
+    form button{padding:12px 18px; border-radius:12px; border:none; font-weight:800; color:#0a0c10;
+      background:linear-gradient(135deg, var(--brand1), var(--brand2)); cursor:pointer}
+    form button:hover{filter:brightness(1.05)}
+
+    /* Footer */
+    footer{background:#0c0e12; border-top:1px solid var(--border); color:var(--muted); text-align:center; padding:22px}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-wrap{grid-template-columns:1fr; padding-top:24px}
+      .about{grid-template-columns:1fr}
+      .bar{grid-template-columns:1fr 1fr; top:56px}
+    }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header>
-    <h1>🚗 HTS Location</h1>
-    <p>Louez votre voiture en toute simplicité</p>
-    <nav>
-      <a href="#catalogue">Nos voitures</a>
-      <a href="#about">À propos</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="container">
+      <div class="nav">
+        <div class="brand">
+          <div class="logo">HTS</div>
+          <div>HTS Location</div>
+        </div>
+        <nav>
+          <a href="#catalogue">Nos voitures</a>
+          <a href="#about">À propos</a>
+          <a href="#contact" class="cta">Réserver</a>
+        </nav>
+      </div>
+    </div>
   </header>
 
-  <section id="catalogue">
-    <h2>Nos voitures</h2>
-    <div class="catalogue">
-      <div class="car">
-        <img src="https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_1280.jpg" alt="Toyota Yaris">
-        <div class="car-info">
-          <h3>Toyota Yaris</h3>
-          <p>Compacte et économique.</p>
-          <p><strong>CHF 50 / jour</strong></p>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <h1>Louez votre voiture en toute simplicité</h1>
+        <p class="muted">Citadines économiques, SUV et modèles premium à Genève. Tarifs clairs, assurance incluse, réservation rapide.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#catalogue">Voir le catalogue</a>
+          <a class="btn" href="#contact">Demander un devis</a>
         </div>
       </div>
-      <div class="car">
-        <img src="https://cdn.pixabay.com/photo/2016/01/19/17/44/porsche-1149132_1280.jpg" alt="Porsche Panamera">
-        <div class="car-info">
-          <h3>Porsche Panamera</h3>
-          <p>Confort et performance.</p>
-          <p><strong>CHF 250 / jour</strong></p>
+      <div class="art">
+        <!-- Remplace l'image par la tienne si tu veux -->
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop" alt="Voiture premium de nuit">
+      </div>
+    </div>
+  </section>
+
+  <!-- (Optionnel) Barre de filtres visuelle -->
+  <div class="filters">
+    <div class="container">
+      <div class="bar">
+        <input type="text" placeholder="Lieu (Genève, Lausanne)">
+        <input type="date" placeholder="Début">
+        <input type="date" placeholder="Fin">
+        <select>
+          <option value="">Type (Citadine, SUV, Luxe)</option>
+          <option>Citadine</option><option>SUV</option><option>Luxe</option>
+        </select>
+        <select>
+          <option value="">Boîte</option>
+          <option>Manuelle</option><option>Automatique</option>
+        </select>
+        <button class="btn btn-primary" style="border:none; cursor:pointer;">Rechercher</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Catalogue -->
+  <section id="catalogue">
+    <div class="container">
+      <div class="section-title">
+        <h2>Nos voitures</h2>
+        <p class="muted">Tarifs par jour, assurance de base incluse.</p>
+      </div>
+
+      <div class="catalogue">
+        <!-- Toyota Yaris -->
+        <div class="car">
+          <div class="thumb">
+            <img src="https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_1280.jpg" alt="Toyota Yaris">
+          </div>
+          <div class="car-info">
+            <h3>Toyota Yaris</h3>
+            <p class="muted">Compacte et économique.</p>
+            <div class="price"><strong>CHF 50</strong><span class="muted">/ jour</span></div>
+            <span class="tag">Manuelle</span>
+            <span class="tag">5 portes</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn" href="#contact">Détails</a>
+            <a class="btn btn-primary" href="#contact">Réserver</a>
+          </div>
+        </div>
+
+        <!-- Porsche Panamera -->
+        <div class="car">
+          <div class="thumb">
+            <img src="https://cdn.pixabay.com/photo/2016/01/19/17/44/porsche-1149132_1280.jpg" alt="Porsche Panamera">
+          </div>
+          <div class="car-info">
+            <h3>Porsche Panamera</h3>
+            <p class="muted">Confort et performance.</p>
+            <div class="price"><strong>CHF 250</strong><span class="muted">/ jour</span></div>
+            <span class="tag">Automatique</span>
+            <span class="tag">4 places</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn" href="#contact">Détails</a>
+            <a class="btn btn-primary" href="#contact">Réserver</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- À propos & Contact -->
   <section id="about">
-    <h2>À propos</h2>
-    <p>HTS Location est une société basée à Genève spécialisée dans la location de voitures. 
-    Nous proposons une large gamme allant de la citadine économique à la voiture de luxe.</p>
+    <div class="container about">
+      <div class="panel">
+        <h2>À propos</h2>
+        <p class="muted">
+          HTS Location est une société basée à Genève, spécialisée dans la location de voitures.
+          De la citadine économique au luxe, nous proposons une gamme adaptée à vos besoins, avec des tarifs transparents et un service réactif.
+        </p>
+      </div>
+      <div class="panel" id="contact">
+        <h2>Contact / Réservation</h2>
+        <form onsubmit="event.preventDefault(); alert('Merci ! Nous vous contactons sous peu.');">
+          <input type="text" placeholder="Nom" required>
+          <input type="email" placeholder="Email" required>
+          <input type="text" placeholder="Voiture souhaitée (ex: Yaris, Panamera)" required>
+          <textarea rows="4" placeholder="Message ou dates de réservation"></textarea>
+          <button type="submit">Envoyer</button>
+        </form>
+      </div>
+    </div>
   </section>
 
-  <section id="contact">
-    <h2>Contact / Réservation</h2>
-    <form>
-      <input type="text" placeholder="Nom" required>
-      <input type="email" placeholder="Email" required>
-      <input type="text" placeholder="Voiture souhaitée" required>
-      <textarea placeholder="Message ou dates de réservation"></textarea>
-      <button type="submit">Envoyer</button>
-    </form>
-  </section>
-
+  <!-- Footer -->
   <footer>
-    <p>© 2025 HTS Location - Genève</p>
+    <p>© 2025 HTS Location — Genève</p>
   </footer>
-
 </body>
 </html>
