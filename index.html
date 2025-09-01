@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTS Location - Location de voitures</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #111; color: white; padding: 20px; text-align: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    section { padding: 40px; }
+    .catalogue { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .car { border: 1px solid #ddd; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .car img { width: 100%; height: 180px; object-fit: cover; }
+    .car-info { padding: 15px; }
+    footer { background: #111; color: white; text-align: center; padding: 20px; }
+    form input, form textarea { width: 100%; padding: 10px; margin: 5px 0; }
+    form button { background: #111; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+    form button:hover { background: #444; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🚗 HTS Location</h1>
+    <p>Louez votre voiture en toute simplicité</p>
+    <nav>
+      <a href="#catalogue">Nos voitures</a>
+      <a href="#about">À propos</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="catalogue">
+    <h2>Nos voitures</h2>
+    <div class="catalogue">
+      <div class="car">
+        <img src="https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_1280.jpg" alt="Toyota Yaris">
+        <div class="car-info">
+          <h3>Toyota Yaris</h3>
+          <p>Compacte et économique.</p>
+          <p><strong>CHF 50 / jour</strong></p>
+        </div>
+      </div>
+      <div class="car">
+        <img src="https://cdn.pixabay.com/photo/2016/01/19/17/44/porsche-1149132_1280.jpg" alt="Porsche Panamera">
+        <div class="car-info">
+          <h3>Porsche Panamera</h3>
+          <p>Confort et performance.</p>
+          <p><strong>CHF 250 / jour</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>À propos</h2>
+    <p>HTS Location est une société basée à Genève spécialisée dans la location de voitures. 
+    Nous proposons une large gamme allant de la citadine économique à la voiture de luxe.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact / Réservation</h2>
+    <form>
+      <input type="text" placeholder="Nom" required>
+      <input type="email" placeholder="Email" required>
+      <input type="text" placeholder="Voiture souhaitée" required>
+      <textarea placeholder="Message ou dates de réservation"></textarea>
+      <button type="submit">Envoyer</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 HTS Location - Genève</p>
+  </footer>
+
+</body>
+</html>
